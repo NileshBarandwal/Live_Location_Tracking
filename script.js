@@ -18,8 +18,45 @@ const createMap = ({ lat, lng }) => {
  * @return {Object}
  */
 const createMarker = ({ map, position }) => {
-  return new google.maps.Marker({ map, position });
+  
+   var myLocationMarker =  new google.maps.Marker({ map, position ,icon: {
+              path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+              strokeColor : '#3333FF',
+              strokeWeight : 5,
+              scale: 2.5
+            },
+        shadow : null,
+        zIndex : 999});
+
+   
+
+    return myLocationMarker;
+
+    enableOrientationArrow();
+
 };
+
+
+function enableOrientationArrow() {
+
+    if (window.DeviceOrientationEvent) {
+
+        window.addEventListener('deviceorientation', function(event) {
+            var alpha = null;
+            //Check for iOS property
+            if (event.webkitCompassHeading) {
+                alpha = event.webkitCompassHeading;
+            }
+            //non iOS
+            else {
+                alpha = event.alpha;
+            }
+            var locationIcon = myLocationMarker.get('icon');
+            locationIcon.rotation = 360 - alpha;
+            myLocationMarker.set('icon', locationIcon);
+        }, false);
+    }
+}
 
 /**
  * Track the user location.
@@ -59,6 +96,7 @@ const getPositionErrorMessage = code => {
  * Initialize the application.
  * Automatically called by the google maps API once it's loaded.
 */
+
 function init() {
   const initialPosition = { lat: 59.32, lng: 17.84 };
   const map = createMap(initialPosition);
@@ -78,7 +116,7 @@ function init() {
       $info.classList.add('error');
     }
   });
-  
+
 // Store old reference
 const appendChild = Element.prototype.appendChild;
 
