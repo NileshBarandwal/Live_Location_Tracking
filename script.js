@@ -37,6 +37,7 @@ const createMarker = ({ map, position }) => {
 };
 
 
+
 function enableOrientationArrow() {
 
     if (window.DeviceOrientationEvent) {
