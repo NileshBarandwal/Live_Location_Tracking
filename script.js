@@ -12,18 +12,48 @@ const createMap = ({ lat, lng }) => {
 };
 
 /**
+ * Device Orientation which help's to move marker to rotate.
+ */
+      
+ window.addEventListener("deviceorientation", handleOrientation, true);
+
+var glb = 0;
+
+function handleOrientation(event) {
+   glb = Math.round(event.alpha);
+  var icon = {
+              path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+              strokeColor : '#3333FF',
+              strokeWeight : 5,
+              scale: 2.5,
+              rotation:glb
+            };
+
+    if (marker) {
+     marker.setIcon(icon);
+  }else{
+    console.log("marker not created yet");
+  }
+  console.log('glb',glb);
+}
+
+/**
  * Create google maps Marker instance.
  * @param {Object} map
  * @param {Object} position
  * @return {Object}
  */
+     
 const createMarker = ({ map, position }) => {
   
-   var myLocationMarker =  new google.maps.Marker({ map, position ,icon: {
+   myLocationMarker =  new google.maps.Marker({ map, position ,icon: {
               path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
               strokeColor : '#3333FF',
               strokeWeight : 5,
-              scale: 2.5
+              scale: 2.5,
+              rotation:glb
+              //rotation:event.alpha,
+
             },
         shadow : null,
         zIndex : 999});
@@ -31,33 +61,8 @@ const createMarker = ({ map, position }) => {
    
 
     return myLocationMarker;
-
-    enableOrientationArrow();
-
 };
 
-
-
-function enableOrientationArrow() {
-
-    if (window.DeviceOrientationEvent) {
-
-        window.addEventListener('deviceorientation', function(event) {
-            var alpha = null;
-            //Check for iOS property
-            if (event.webkitCompassHeading) {
-                alpha = event.webkitCompassHeading;
-            }
-            //non iOS
-            else {
-                alpha = event.alpha;
-            }
-            var locationIcon = myLocationMarker.get('icon');
-            locationIcon.rotation = 360 - alpha;
-            myLocationMarker.set('icon', locationIcon);
-        }, false);
-    }
-}
 
 /**
  * Track the user location.
@@ -97,11 +102,16 @@ const getPositionErrorMessage = code => {
  * Initialize the application.
  * Automatically called by the google maps API once it's loaded.
 */
+// if(window.innerHeight > window.innerWidth){
+//     alert("Please use Landscape!");
+// }
+// Listen for orientation changes
 
+var marker;
 function init() {
   const initialPosition = { lat: 59.32, lng: 17.84 };
   const map = createMap(initialPosition);
-  const marker = createMarker({ map, position: initialPosition });
+  marker = createMarker({ map, position: initialPosition });
   const $info = document.getElementById('info');
 
   let watchId = trackLocation({
