@@ -58,6 +58,15 @@ const createMarker = ({ map, position }) => {
         shadow : null,
         zIndex : 999});
 
+   // Add circle overlay and bind to marker
+var circle = new google.maps.Circle({
+  map: map,
+  radius: 1000,    // 10 miles in metres
+  fillColor: '#AA0000',
+   strokeColor : '#AA0000',
+});
+circle.bindTo('center', myLocationMarker, 'position');
+
    
 
     return myLocationMarker;
