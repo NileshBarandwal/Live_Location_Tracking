@@ -26,7 +26,7 @@ function handleOrientation(event) {
               strokeColor : '#3333FF',
               strokeWeight : 5,
               scale: 2.5,
-              rotation:-glb
+              rotation:glb
             };
 
     if (marker) {
