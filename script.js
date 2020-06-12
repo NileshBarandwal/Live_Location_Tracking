@@ -62,8 +62,8 @@ const createMarker = ({ map, position }) => {
 var circle = new google.maps.Circle({
   map: map,
   radius: 1000,    // 10 miles in metres
-  fillColor: '#AA0000',
-   strokeColor : '#AA0000',
+  fillColor: '#108ee76e',
+   strokeColor : '#108ee7',
 });
 circle.bindTo('center', myLocationMarker, 'position');
 
